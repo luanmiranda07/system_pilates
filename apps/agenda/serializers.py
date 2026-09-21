@@ -1,0 +1,24 @@
+from rest_framework import serializers
+from apps.clientes.models import Cliente
+from apps.professores.models import Professor
+from apps.agenda.models import Aula
+
+class AulaSerializer(serializers.ModelSerializer):
+    cliente_nome = serializers.CharField(source="cliente.nome", read_only=True)
+    professor_nome = serializers.CharField(source="professor.nome", read_only=True)
+
+    class Meta:
+        model = Aula
+        fields = [
+            "id",
+            "cliente_nome",
+            "cliente",
+            "professor_nome",
+            "professor",
+            "data_hora",
+            "duracao",
+            "local",
+            "status",
+            "criado_em",
+        ]
+        
