@@ -4,7 +4,7 @@ from rest_framework.exceptions import ValidationError
 
 from apps.agenda.models import Aula
 from apps.agenda.serializers import AulaSerializer
-from apps.agenda.services import marcar_aula
+from apps.agenda.services import marcar_aula, verificar_conflitos
 
 
 class AulaViewSet(viewsets.ModelViewSet):
@@ -27,6 +27,21 @@ class AulaViewSet(viewsets.ModelViewSet):
         except DjangoValidationError as e:
             raise ValidationError(e.message_dict)
         serializer.instance = aula
+
+    def perform_update(self, serializer):
+        instancia = serializer.instance
+        dados = {
+            "professor": serializer.validated_data.get("professor", instancia.professor),
+            "local": serializer.validated_data.get("local", instancia.local),
+            "data_hora": serializer.validated_data.get("data_hora", instancia.data_hora),
+        }
+        status = serializer.validated_data.get("status", instancia.status)
+        if status != Aula.Status.CANCELADA:
+            try:
+                verificar_conflitos(dados, ignorar_id=instancia.id)
+            except DjangoValidationError as e:
+                raise ValidationError(e.message_dict)
+        serializer.save()
 
     def perform_destroy(self, instance):
         instance.status = Aula.Status.CANCELADA

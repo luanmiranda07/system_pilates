@@ -16,4 +16,4 @@ class ProfessorSerializer(serializers.ModelSerializer):
             "criado_em"
         ]
 
-        read_only_fields = ["id","ativo","criado_em"]
+        read_only_fields = ["id", "criado_em"]

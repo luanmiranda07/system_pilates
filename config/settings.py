@@ -26,7 +26,13 @@ SECRET_KEY = 'django-insecure-94gsyl@&cyg1(e-85c)62s0!567u38g*cix4+pwx=8qe^xoevy
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+
+# Front React (Vite). Em dev o Vite já faz proxy de /api, isto cobre acesso direto.
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
 
 
 # Application definition

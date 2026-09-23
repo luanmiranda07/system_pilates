@@ -4,22 +4,20 @@ from django.core.exceptions import ValidationError
 from apps.agenda.models import Aula
 
 
-def marcar_aula(dados):
-    conflito_professor = Aula.objects.filter(
-        professor=dados["professor"],
-        data_hora=dados["data_hora"],
-    ).exclude(status=Aula.Status.CANCELADA).exists()
+def verificar_conflitos(dados, ignorar_id=None):
+    ativas = Aula.objects.exclude(status=Aula.Status.CANCELADA)
+    if ignorar_id:
+        ativas = ativas.exclude(id=ignorar_id)
 
-    if conflito_professor:
+    if ativas.filter(professor=dados["professor"], data_hora=dados["data_hora"]).exists():
         raise ValidationError({"professor": "Este professor já tem aula nesse horário."})
 
-    conflito_local = Aula.objects.filter(
-        local=dados["local"],
-        data_hora=dados["data_hora"],
-    ).exclude(status=Aula.Status.CANCELADA).exists()
-
-    if conflito_local:
+    if ativas.filter(local=dados["local"], data_hora=dados["data_hora"]).exists():
         raise ValidationError({"local": "Este local já está ocupado nesse horário."})
+
+
+def marcar_aula(dados):
+    verificar_conflitos(dados)
 
     aula = Aula.objects.create(
         cliente=dados["cliente"],

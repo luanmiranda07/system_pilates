@@ -6,6 +6,7 @@ from apps.agenda.models import Aula
 class AulaSerializer(serializers.ModelSerializer):
     cliente_nome = serializers.CharField(source="cliente.nome", read_only=True)
     professor_nome = serializers.CharField(source="professor.nome", read_only=True)
+    telefone_professor = serializers.CharField(source="professor.telefone", read_only=True)
 
     class Meta:
         model = Aula
@@ -19,6 +20,9 @@ class AulaSerializer(serializers.ModelSerializer):
             "duracao",
             "local",
             "status",
+            "observacoes",
             "criado_em",
         ]
+        # Conflitos de horário são checados em services.py (ignorando aulas canceladas).
+        validators = []
         
