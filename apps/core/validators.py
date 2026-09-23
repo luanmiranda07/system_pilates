@@ -19,3 +19,16 @@ def validar_cpf(valor):
 
     if calcular(9) != int(digitos[9]) or calcular(10) != int(digitos[10]):
         raise ValidationError("CPF inválido.")
+
+
+
+
+def nomes_sem_caracteres_especiais(valor):
+    if not re.match(r"^[a-zA-ZÀ-ÿ\s]+$", valor):
+        raise ValidationError("O nome não pode conter caracteres especiais ou números.") 
+    return valor
+
+def validar_telefone(valor):
+    if not re.match(r"^\+?\d{10,15}$", valor):
+        raise ValidationError("O telefone deve conter apenas números e pode incluir o código do país.")      
+    return valor
