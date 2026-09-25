@@ -16,6 +16,7 @@ class AulaSerializer(serializers.ModelSerializer):
             "cliente",
             "professor_nome",
             "professor",
+            "telefone_professor",
             "data_hora",
             "duracao",
             "local",

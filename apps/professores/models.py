@@ -16,11 +16,10 @@ class Professor(TimeStampedModel):
     ativo = models.BooleanField(default=True)
     criado_em = models.DateTimeField(auto_now_add=True)
 
-class Meta:
-        verbose_name = "Profesor"
+    class Meta:
+        verbose_name = "Professor"
         verbose_name_plural = "Professores"
         ordering = ["nome"]
 
-
-def __str__(self):
+    def __str__(self):
         return self.nome
